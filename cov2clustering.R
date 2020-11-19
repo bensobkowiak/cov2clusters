@@ -1,7 +1,17 @@
 
 cov2clusters <- function(metafile, distanceMatrix, beta = c(1, 1, 1),
-                         SNPthreshold = NULL, includeDate = TRUE, dateThreshold=NULL,  
-                         includeSpatial = FALSE, CSVfile=FALSE,probThreshold=0.8){
+                         SNPthreshold = NULL, includeDate = TRUE, dateThreshold=21,  
+                         includeSpatial = FALSE, CSVfile=FALSE,probThreshold=0.8,
+                         renameclusters=FALSE){
+  if (!require(stringi)){
+    install.packages("stringi",repos = "http://cran.us.r-project.org")
+    library(stringi)
+  }
+  if (!require(reshape2)){
+    install.packages("reshape2",repos = "http://cran.us.r-project.org")
+    library(reshape2)
+  }
+  options(stringsAsFactors = F)
   
   #Check inputs
   if (((includeDate & !includeSpatial) |(!includeDate & includeSpatial))  && length(beta)!=3){
@@ -14,8 +24,11 @@ cov2clusters <- function(metafile, distanceMatrix, beta = c(1, 1, 1),
   
   #Load data
   metaData <- read.csv(metafile)
-  distMatrix<-read.table(distanceMatrix)
-
+  if (any(distanceMatrix==".txt")){
+    distMatrix<-read.table(distanceMatrix)
+  } else {distMatrix<-distanceMatrix
+  }
+  
   #order metaData by distMatrix
   metaData<-metaData[which(metaData[,1] %in% colnames(distMatrix)),]
   meta.order<-integer()
@@ -58,8 +71,8 @@ cov2clusters <- function(metafile, distanceMatrix, beta = c(1, 1, 1),
         dataInput$trans[i,j]<-0
       } else if (!is.null(dateThreshold) && covariates[3]>(dateThreshold/365)){
         dataInput$trans[i,j]<-0
-      #} else if (covariates[2]==0){
-      #  dataInput$trans[i,j]<-1
+        #} else if (covariates[2]==0){
+        #  dataInput$trans[i,j]<-1
       } else {
         dataInput$trans[i,j] = 1/(1 + exp(- (sum(beta*covariates))))
       }
@@ -108,7 +121,16 @@ cov2clusters <- function(metafile, distanceMatrix, beta = c(1, 1, 1),
   }
   
   ## Rename clusters by earliest case date and location
-  
+  if (renameclusters){
+    date.table<-data.frame(c("jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"),rep(sprintf("%03d",1),12))
+    for (clust in unique(cluster_results[,2])){
+      mon<-lubridate::month(min(metaData$Collection_Date[which(metaData$SamID %in% 
+                                                                 cluster_results[which(cluster_results[,2]==clust),1])]))
+      mon_num<-paste0(date.table[mon,1:2],collapse = ".")
+      cluster_results[which(cluster_results[,2]==clust),2]<-paste0(mon_num,".BC.",stri_rand_strings(1,3,"[b-df-hj-np-tv-z]"))
+      date.table[mon,2]<-sprintf("%03d",as.numeric(date.table[mon,2])+1)
+    }
+  }
   
   # Output file
   cluster_results<-cluster_results[order(cluster_results[,2]),]
@@ -117,7 +139,7 @@ cov2clusters <- function(metafile, distanceMatrix, beta = c(1, 1, 1),
   noclust<-cbind(as.character(metaData[which(!as.character(metaData[,1]) %in% cluster_results$ID),1]),NA)
   cluster_results<-rbind(as.matrix(cluster_results),noclust)
   if (CSVfile){
-  write.csv(cluster_results,"cov2cluster_results.csv",row.names = F)
+    write.csv(cluster_results,"cov2cluster_results.csv",row.names = F)
   }
   return(cluster_results)
 } 
