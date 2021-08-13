@@ -1,8 +1,8 @@
-## Main clustering function #### ADD params
+## Main clustering function
 
-cov2clusters<-function(treeName="BC_MDU_finalTree.nwk",metafile=NA,
+cov2clusters<-function(treeName="tree.nwk",metafile=NA,
                        json_dates= TRUE,json_file="branch_lengths.json",
-                       beta=c(3,-19735.98,-0.075),returnTransProbs=TRUE,
+                       beta=c(3,-19735.98,-0.075),returnTransProbs=FALSE,
                        dateThreshold=40,restrictClusters=FALSE,
                        probThreshold=c(0.7,0.8,0.9),
                        newClustering=TRUE, clusterFile=NA,
@@ -76,29 +76,46 @@ cov2clusters<-function(treeName="BC_MDU_finalTree.nwk",metafile=NA,
     } else {
       pastClusters<-read.table(clusterFile,header = T,check.names = F)
       clusters<-unique(cluster_results[,2])
+      clustersDF<-data.frame(ClusterName=rep(NA,length(clusters)),ClusterComposition=rep(NA,length(clusters)))
       months<-c("JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC")
       randstring<-stri_rand_strings(length(clusters)*2,3,"[b-df-hj-np-tv-z]")
       randstring<-unique(randstring) # make sure string is unique
       for (clust in 1:length(clusters)){
         rownum<-which(cluster_results[,2]==clusters[clust])
         pastClusterNames<-pastClusters[which(pastClusters[,1] %in% cluster_results[rownum,1]),2]
-        pastClusterDF<-data.frame(table(pastClusterNames),prop.in.clust=0)
-        for (i in 1:nrow(pastClusterDF)){
-          pastClusterDF$prop.in.clust[i]<-pastClusterDF$Freq/length(which(pastClusters[,2] %in% pastClusterDF$pastClusterNames[i]))
-        }
-        pastClusterDF<-pastClusterDF[pastClusterDF$pastClusterNames!="-1",]
-        if (nrow(pastClusterDF)>0 &
-            pastClusterDF[which.max(pastClusterDF$Freq),3]>=0.6){
-          cluster_results[rownum,2]<-as.character(pastClusterDF[which.max(pastClusterDF$Freq),1])
-          cluster_results[rownum,3]<-pastClusterNames
+        if (length(pastClusterNames)>0){
+          pastClusterDF<-data.frame(table(pastClusterNames),prop.in.clust=0)
+          for (i in 1:nrow(pastClusterDF)){
+            pastClusterDF$prop.in.clust[i]<-pastClusterDF$Freq/length(which(pastClusters[,2] %in% pastClusterDF$pastClusterNames[i]))
+          }
+          clustersDF$ClusterComposition[clust]<-paste0(paste0(pastClusterDF$pastClusterNames,",",pastClusterDF$prop.in.clust),",",collapse = "")
+          pastClusterDF<-pastClusterDF[pastClusterDF$pastClusterNames!="-1",]
+          if (nrow(pastClusterDF)>0 &
+              pastClusterDF[which.max(pastClusterDF$Freq),3]>=0.6){
+            clustername<-as.character(pastClusterDF[which.max(pastClusterDF$Freq),1])
+            cluster_results[rownum,2]<-clustername
+            clustersDF$ClusterName[clust]<-clustername
+            cluster_results[rownum,3]<-pastClusterNames
+          } else {
+            mon<-month(min(dates[which(dates[,1] %in% 
+                                         cluster_results[rownum,1]),2]))
+            yea<-substr(year(min(dates[which(dates[,1] %in% 
+                                               cluster_results[rownum,1]),2])),3,4)
+            clustername<-paste0(paste0(months[mon],yea),".",clusternameIdent,".",randstring[clust])
+            cluster_results[rownum,2]<-clustername
+            clustersDF$ClusterName[clust]<-clustername
+          }
         } else {
           mon<-month(min(dates[which(dates[,1] %in% 
                                        cluster_results[rownum,1]),2]))
           yea<-substr(year(min(dates[which(dates[,1] %in% 
                                              cluster_results[rownum,1]),2])),3,4)
-          cluster_results[rownum,2]<-paste0(paste0(months[mon],yea),".",clusternameIdent,".",randstring[clust])
+          clustername<-paste0(paste0(months[mon],yea),".",clusternameIdent,".",randstring[clust])
+          cluster_results[rownum,2]<-clustername
+          clustersDF$ClusterName[clust]<-clustername
         }
       }
+      write.csv(clustersDF,paste0(outfile,"_",probThreshold[threshold],"_ClustersSummary",Sys.Date(),".csv"),row.names = F)# cluster summary output
     }
     
     # Output file 
