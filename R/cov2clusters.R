@@ -83,19 +83,25 @@ cov2clusters<-function(treeName="tree.nwk",metafile=NA,
       for (clust in 1:length(clusters)){
         rownum<-which(cluster_results[,2]==clusters[clust])
         pastClusterNames<-pastClusters[which(pastClusters[,1] %in% cluster_results[rownum,1]),2]
+        for (j in 1:length(rownum)){
+          if (cluster_results[rownum[j],1] %in% pastClusters[,1]){
+            cluster_results[rownum[j],3]<-pastClusters[which(pastClusters[,1] %in% cluster_results[rownum[j],1]),2]
+          }}
         if (length(pastClusterNames)>0){
           pastClusterDF<-data.frame(table(pastClusterNames),prop.in.clust=0)
           for (i in 1:nrow(pastClusterDF)){
-            pastClusterDF$prop.in.clust[i]<-pastClusterDF$Freq/length(which(pastClusters[,2] %in% pastClusterDF$pastClusterNames[i]))
-          }
-          clustersDF$ClusterComposition[clust]<-paste0(paste0(pastClusterDF$pastClusterNames,",",pastClusterDF$prop.in.clust),",",collapse = "")
+            if (pastClusterDF$pastClusterNames[i]=="-1"){
+              pastClusterDF$prop.in.clust[i]<-NA
+            } else {
+              pastClusterDF$prop.in.clust[i]<-round(pastClusterDF$Freq[i]/length(which(pastClusters[,2] %in% pastClusterDF$pastClusterNames[i])),2)
+            }}
+          clustersDF$ClusterComposition[clust]<-paste0(paste0(pastClusterDF$pastClusterNames,",",pastClusterDF$Freq,",",pastClusterDF$prop.in.clust),":",collapse = "")
           pastClusterDF<-pastClusterDF[pastClusterDF$pastClusterNames!="-1",]
-          if (nrow(pastClusterDF)>0 &
+          if (nrow(pastClusterDF)>0 &&
               pastClusterDF[which.max(pastClusterDF$Freq),3]>=0.6){
             clustername<-as.character(pastClusterDF[which.max(pastClusterDF$Freq),1])
             cluster_results[rownum,2]<-clustername
             clustersDF$ClusterName[clust]<-clustername
-            cluster_results[rownum,3]<-pastClusterNames
           } else {
             mon<-month(min(dates[which(dates[,1] %in% 
                                          cluster_results[rownum,1]),2]))
@@ -136,3 +142,4 @@ cov2clusters<-function(treeName="tree.nwk",metafile=NA,
     write.table(cluster_results,paste0(outfile,"_",probThreshold[threshold],"_GenomicClusters",Sys.Date(),".txt"),row.names = F,sep = "\t",quote = F)
   }
 }
+
