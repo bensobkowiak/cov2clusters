@@ -12,3 +12,6 @@ Or with a .json file:
 
 cov2clusters(treeName = "tree.nwk", json_file = dates.json)
 
+Please cite the following preprint if you choose to use this approach in published work:
+
+https://www.medrxiv.org/content/10.1101/2022.03.10.22272213v2
