@@ -6,11 +6,11 @@ The input is an untimed phylogenetic tree in Newick format and collection dates,
 
 To run with with default parameters and dates in a .csv file with two columns (ID, date):
 
-cov2clusters(treeName = "tree.nwk", metafile = "dates.csv", json_dates = FALSE)
+> cov2clusters(treeName = "tree.nwk", metafile = "dates.csv", json_dates = FALSE)
 
 Or with a .json file:
 
-cov2clusters(treeName = "tree.nwk", json_file = dates.json)
+> cov2clusters(treeName = "tree.nwk", json_file = dates.json)
 
 Please cite the following preprint if you choose to use this approach in published work:
 
