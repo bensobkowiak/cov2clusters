@@ -3,13 +3,13 @@
 #############################################################################################
 
 #' @param treeName Name of the input phylogenetic tree, in newick format
-#' @param metafile Minimum read depth at site to accurately call allele frequency
+#' @param metafile Name of the date file if in .csv format with columns "sequence ID" and "dates" (not required if json_dates = TRUE and restrictClusters = FALSE)
+#' @param json_dates If TRUE - dates are supplied in json format file
+#' @param json_file If json_dates = TRUE - name .json dates file
 #' @param contactData Prefix for output files
 #' @param contactFile Minimum read depth at site to accurately call allele frequency
-#' @param json_dates Prefix for output files
-#' @param json_file Minimum read depth at site to accurately call allele frequency
-#' @param beta Prefix for output files
-#' @param returnTransProbs Minimum read depth at site to accurately call allele frequency
+#' @param beta List of the beta coefficients beta0 - beta3 
+#' @param returnTransProbs Return text file of pairwise logit probabilities (must = TRUE if newClustering = FALSE)
 #' @param dateThreshold Integer for the hard upper limit of 
 #' @param restrictClusters If TRUE - Cluster sequences only with a shared variable in the metafile column 'restrictCluster' (optional)
 #' @param probThreshold Integer or list - Pairwise probability threshold to cluster sequences
@@ -22,8 +22,9 @@
 #' @return Text file with three columns - Sequence ID from tree tip, cluster name, and past cluster name (if applicable)
 #' @export
 
-cov2clusters<-function(treeName="tree.nwk",metafile=NA, contactData=FALSE,contactFile=NA,
+cov2clusters<-function(treeName="tree.nwk",metafile=NA,
                        json_dates=TRUE,json_file="branch_lengths.json",
+                       contactData=FALSE,contactFile=NA,
                        beta=c(3,-19735.98,-0.075,-0.2),returnTransProbs=FALSE,
                        dateThreshold=40,restrictClusters=FALSE,
                        probThreshold=c(0.8,0.9),
