@@ -6,11 +6,11 @@
 #' @param metafile Name of the date file if in .csv format with columns "sequence ID" and "dates" (not required if json_dates = TRUE and restrictClusters = FALSE)
 #' @param json_dates If TRUE - dates are supplied in json format file
 #' @param json_file If json_dates = TRUE - name .json dates file
-#' @param contactData Prefix for output files
-#' @param contactFile Minimum read depth at site to accurately call allele frequency
-#' @param beta List of the beta coefficients beta0 - beta3 
+#' @param contactData If TRUE - file will be supplied with contact data 
+#' @param contactFile File contacting contact, in .csv format (required if contactData = TRUE)
+#' @param beta List of the beta coefficients beta0 - beta3 (Intercept, patristic distance, date difference, and contact data(if applicable))
 #' @param returnTransProbs Return text file of pairwise logit probabilities (must = TRUE if newClustering = FALSE)
-#' @param dateThreshold Integer for the hard upper limit of 
+#' @param dateThreshold Integer for the hard upper limit of date difference (in days) to link pairs of sequences in a cluster (default = 40)
 #' @param restrictClusters If TRUE - Cluster sequences only with a shared variable in the metafile column 'restrictCluster' (optional)
 #' @param probThreshold Integer or list - Pairwise probability threshold to cluster sequences
 #' @param newClustering If TRUE - 
