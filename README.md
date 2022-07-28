@@ -1,4 +1,5 @@
-# cov2clusters - Stable clustering of SARS-CoV-2 sequences from phylogenetic trees
+# cov2clusters 
+## Stable clustering of SARS-CoV-2 sequences from phylogenetic trees
 
 This repository contains two R scripts (cov2clusters.R and clusteringFunctions.R) for genomic clustering and assigning cluster names of SARS-Cov-2 sequences. There is also a folder containing demo data and results.
 
