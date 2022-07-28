@@ -1,5 +1,11 @@
+#---------------------
+# Function `TransProbs`
+#---------------------
 
-### Logit probability function
+#' Calculate pairwise logit probability between tree sequences
+#'
+#' @export
+
 TransProbs<-function(dataInput,contactData,probThreshold,dateThreshold,restrictClusters,beta){
   PatDist<-dataInput$PatDist
   dates<-dataInput$dates
@@ -45,7 +51,14 @@ TransProbs<-function(dataInput,contactData,probThreshold,dateThreshold,restrictC
   transmat<-transmat[!is.na(transmat[,3]),]
 }
 
-### Number cluster function
+#---------------------
+# Function `numberClusters`
+#---------------------
+
+#' Hierarchical clustering of sequences based on accepted transmission links above probability threshold
+#'
+#' @export
+
 numberClusters<-function(acceptTrans){
   names<-unique(c(as.character(acceptTrans[,1]),as.character(acceptTrans[,2])))
   cluster_results<-matrix(NA,ncol = 2, nrow = length(names))
