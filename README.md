@@ -13,7 +13,7 @@ To run with with default parameters and dates in a .csv file with two columns (I
 
 Or with a .json file for dates:
 
-``` cov2clusters(treeName = "tree.nwk", json_file = dates.json)```
+``` cov2clusters(treeName = "tree.nwk", json_file = "dates.json")```
 
 ## Citation
 
