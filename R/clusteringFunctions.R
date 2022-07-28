@@ -1,5 +1,5 @@
-### Logit probability function
 
+### Logit probability function
 TransProbs<-function(dataInput,contactData,probThreshold,dateThreshold,restrictClusters,beta){
   PatDist<-dataInput$PatDist
   dates<-dataInput$dates
@@ -46,7 +46,6 @@ TransProbs<-function(dataInput,contactData,probThreshold,dateThreshold,restrictC
 }
 
 ### Number cluster function
-
 numberClusters<-function(acceptTrans){
   names<-unique(c(as.character(acceptTrans[,1]),as.character(acceptTrans[,2])))
   cluster_results<-matrix(NA,ncol = 2, nrow = length(names))
