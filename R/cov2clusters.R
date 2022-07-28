@@ -2,7 +2,7 @@
 ########### cov2clusters - SARS-CoV-2 genomic clusters from phylogenetic trees ##############
 #############################################################################################
 
-#' @param treeName Multisample VCF file
+#' @param treeName Name of the input phylogenetic tree, in newick format
 #' @param metafile Minimum read depth at site to accurately call allele frequency
 #' @param contactData Prefix for output files
 #' @param contactFile Minimum read depth at site to accurately call allele frequency
@@ -14,12 +14,12 @@
 #' @param restrictClusters If TRUE - Cluster sequences only with a shared variable in the metafile column 'restrictCluster' (optional)
 #' @param probThreshold Integer or list - Pairwise probability threshold to cluster sequences
 #' @param newClustering If TRUE - 
-#' @param newClustering If TRUE - 
-#' @param newClustering If TRUE - 
-#' @param newClustering If TRUE - 
-#' @param newClustering If TRUE - 
+#' @param pastTransProbs If TRUE - 
+#' @param clusterFile If TRUE - 
+#' @param clusternameIdent If TRUE - 
+#' @param outfile Prefix for the output file
 #' @param no.Cores Integer - number of cores to run the function, can be multithreaded
-#' @return new vcf files with mixed infections removed and mixed infection summary .csv file
+#' @return Text file with three columns - Sequence ID from tree tip, cluster name, and past cluster name (if applicable)
 #' @export
 
 cov2clusters<-function(treeName="tree.nwk",metafile=NA, contactData=FALSE,contactFile=NA,
