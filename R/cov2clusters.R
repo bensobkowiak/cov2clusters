@@ -12,11 +12,11 @@
 #' @param returnTransProbs Return text file of pairwise logit probabilities (must = TRUE if newClustering = FALSE)
 #' @param dateThreshold Integer for the hard upper limit of date difference (in days) to link pairs of sequences in a cluster (default = 40)
 #' @param restrictClusters If TRUE - Cluster sequences only with a shared variable in the metafile column 'restrictCluster' (optional)
-#' @param probThreshold Integer or list - Pairwise probability threshold to cluster sequences
-#' @param newClustering If TRUE - 
-#' @param pastTransProbs If TRUE - 
-#' @param clusterFile If TRUE - 
-#' @param clusternameIdent If TRUE - 
+#' @param probThreshold Integer or list - Pairwise probability threshold for clustering sequences
+#' @param newClustering If TRUE - perform clustering on all sequences for the first time, if FALSE - include past cluster designations of sequences in new clustering run
+#' @param pastTransProbs If newClustering = FALSE, this will be the text file returned from returnTransProbs = TRUE in the past clustering run
+#' @param clusterFile If newClustering = FALSE, this will be output cluster file returned from the past clustering run
+#' @param clusternameIdent Character string to include in the cluster names (default = "clust")
 #' @param outfile Prefix for the output file
 #' @param no.Cores Integer - number of cores to run the function, can be multithreaded
 #' @return Text file with three columns - Sequence ID from tree tip, cluster name, and past cluster name (if applicable)
