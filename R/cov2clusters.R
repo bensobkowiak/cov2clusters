@@ -2,13 +2,31 @@
 ########### cov2clusters - SARS-CoV-2 genomic clusters from phylogenetic trees ##############
 #############################################################################################
 
-
+#' @param treeName Multisample VCF file
+#' @param metafile Minimum read depth at site to accurately call allele frequency
+#' @param contactData Prefix for output files
+#' @param contactFile Minimum read depth at site to accurately call allele frequency
+#' @param json_dates Prefix for output files
+#' @param json_file Minimum read depth at site to accurately call allele frequency
+#' @param beta Prefix for output files
+#' @param returnTransProbs Minimum read depth at site to accurately call allele frequency
+#' @param dateThreshold Integer for the hard upper limit of 
+#' @param restrictClusters If TRUE - Cluster sequences only with a shared variable in the metafile column 'restrictCluster' (optional)
+#' @param probThreshold Integer or list - Pairwise probability threshold to cluster sequences
+#' @param newClustering If TRUE - 
+#' @param newClustering If TRUE - 
+#' @param newClustering If TRUE - 
+#' @param newClustering If TRUE - 
+#' @param newClustering If TRUE - 
+#' @param no.Cores Integer - number of cores to run the function, can be multithreaded
+#' @return new vcf files with mixed infections removed and mixed infection summary .csv file
+#' @export
 
 cov2clusters<-function(treeName="tree.nwk",metafile=NA, contactData=FALSE,contactFile=NA,
                        json_dates=TRUE,json_file="branch_lengths.json",
                        beta=c(3,-19735.98,-0.075,-0.2),returnTransProbs=FALSE,
                        dateThreshold=40,restrictClusters=FALSE,
-                       probThreshold=0.8,
+                       probThreshold=c(0.8,0.9),
                        newClustering=TRUE, pastTransProbs=NA,
                        clusterFile=NA,
                        clusternameIdent = "clust",
@@ -178,4 +196,5 @@ cov2clusters<-function(treeName="tree.nwk",metafile=NA, contactData=FALSE,contac
     write.table(cluster_results,paste0(outfile,"_",probThreshold[threshold],"_GenomicClusters",Sys.Date(),".txt"),row.names = F,sep = "\t",quote = F)
   }
 }
+
 
