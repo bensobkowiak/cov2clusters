@@ -17,9 +17,9 @@ Or with a .json file for dates:
 
 ## Citation
 
-Please cite the following preprint if you choose to use this approach in published work:
+Please cite Sobkowiak et. al. 2022 if you choose to use this approach in published work:
 
-https://www.medrxiv.org/content/10.1101/2022.03.10.22272213v2
+https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-022-08936-4
 
 
 This code has been tested on R version 3.6.0 (2019-04-26).
